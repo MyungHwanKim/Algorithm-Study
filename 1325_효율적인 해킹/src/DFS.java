@@ -1,15 +1,15 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
+public class DFS {
     static List<List<Integer>> graph = new ArrayList<>();
+    static boolean[] visited;
     static int[] result;
-    static int N, M;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
         result = new int[N + 1];
 
@@ -26,7 +26,8 @@ public class Main {
         }
 
         for (int i = 1; i <= N; i++) {
-            bfs(i);
+            visited = new boolean[N + 1];
+            dfs(i);
         }
 
         // 가장 많이 해킹한 값
@@ -39,21 +40,13 @@ public class Main {
         }
     }
 
-    public static void bfs(int start) {
-        boolean[] visited = new boolean[N + 1]; // 방문 여부
-        Queue<Integer> queue = new LinkedList<>();
+    public static void dfs(int start) {
         visited[start] = true;
-        queue.offer(start);
 
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            for (int next : graph.get(cur)) {
-                // 아직 방문하지 않은 컴퓨터 번호일 경우
-                if (!visited[next]) {
-                    visited[next] = true;
-                    result[next]++;
-                    queue.offer(next);
-                }
+        for (int next : graph.get(start)) {
+            if (!visited[next]) {
+                result[next]++;
+                dfs(next);
             }
         }
     }
